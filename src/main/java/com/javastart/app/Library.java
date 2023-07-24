@@ -1,4 +1,6 @@
-package com.javastart;
+package com.javastart.app;
+
+import com.javastart.model.Book;
 
 public class Library {
     public static void main(String[] args) {
