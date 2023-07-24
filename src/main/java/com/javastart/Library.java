@@ -15,11 +15,6 @@ public class Library {
 
         System.out.println(appName);
         System.out.println("Available books:");
-        System.out.println(title);
-        System.out.println(author);
-        System.out.println(releaseDate);
-        System.out.println(pages);
-        System.out.println(publisher);
-        System.out.println(isbn);
+        System.out.println(book.toString());
     }
 }
