@@ -11,6 +11,8 @@ public class Library {
         String publisher ="Bloomsbury";
         String isbn = "123456";
 
+        Book book = new Book(title, author, releaseDate, pages, publisher, isbn);
+
         System.out.println(appName);
         System.out.println("Available books:");
         System.out.println(title);
