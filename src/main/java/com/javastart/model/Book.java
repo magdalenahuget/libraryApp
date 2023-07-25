@@ -75,13 +75,16 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
+        String info = "Book -> " +
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", releaseDate=" + releaseDate +
                 ", pages=" + pages +
-                ", publisher='" + publisher + '\'' +
-                ", isbn='" + isbn + '\'' +
-                '}';
+                ", publisher='" + publisher + '\'';
+        if (isbn == null) {
+            return info;
+        } else {
+            return info + ", isbn='" + isbn;
+        }
     }
 }
