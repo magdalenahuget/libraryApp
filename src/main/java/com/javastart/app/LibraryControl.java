@@ -6,13 +6,13 @@ import com.javastart.model.Library;
 
 public class LibraryControl {
 
-    private final int exit = 0;
-    private final int addBook = 1;
-    private final int printBooks = 2;
+    private static final int EXIT = 0;
+    private static final int ADD_BOOK = 1;
+    private static final int PRINT_BOOKS = 2;
     private DataReader dataReader = new DataReader();
     private Library library = new Library();
 
-    Book[] books = new Book[1000];
+//    Book[] books = new Book[1000];
 
     public void controlLoop() {
         int option;
@@ -21,19 +21,19 @@ public class LibraryControl {
             printOptions();
             option = dataReader.getInt();
             switch (option) {
-                case addBook:
+                case ADD_BOOK:
                     addBook();
                     break;
-                case printBooks:
+                case PRINT_BOOKS:
                     printBooks();
                     break;
-                case exit:
+                case EXIT:
                     exit();
                     break;
                 default:
                     System.out.println("There is no such option, please re-enter.");
             }
-        } while (option != exit);
+        } while (option != EXIT);
     }
 
     private void addBook() {
@@ -47,9 +47,9 @@ public class LibraryControl {
 
     private void printOptions() {
         System.out.println("Choose option:");
-        System.out.println(exit + "-exit from a program");
-        System.out.println(addBook + "-add a new book");
-        System.out.println(printBooks + "-print all available books");
+        System.out.println(EXIT + "-exit from a program");
+        System.out.println(ADD_BOOK + "-add a new book");
+        System.out.println(PRINT_BOOKS + "-print all available books");
 
     }
 
