@@ -30,4 +30,10 @@ public class DataReader {
     public void close(){
         scanner.close();
     }
+
+    public int getInt(){
+        int inputInt = scanner.nextInt();
+        scanner.nextLine();
+        return inputInt;
+    }
 }

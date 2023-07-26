@@ -73,8 +73,7 @@ public class Book {
         this.isbn = isbn;
     }
 
-    @Override
-    public String toString() {
+    public String printInfo() {
         String info = "Book -> " +
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
