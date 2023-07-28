@@ -14,6 +14,9 @@ public class DataReader {
         this.consolePrinter = consolePrinter;
     }
 
+    public String getString(){
+        return scanner.nextLine();
+    }
     public void close() {
         scanner.close();
     }

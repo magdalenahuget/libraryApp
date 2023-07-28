@@ -1,8 +1,12 @@
 package com.javastart.app;
 
+import com.javastart.exception.DataExportException;
+import com.javastart.exception.DataImportException;
 import com.javastart.exception.NoSuchOptionException;
 import com.javastart.io.ConsolePrinter;
 import com.javastart.io.DataReader;
+import com.javastart.io.file.FileManager;
+import com.javastart.io.file.FileManagerBuilder;
 import com.javastart.model.Book;
 import com.javastart.model.Library;
 import com.javastart.model.Magazine;
@@ -13,8 +17,21 @@ import java.util.InputMismatchException;
 public class LibraryControl {
     private ConsolePrinter printer = new ConsolePrinter();
     private DataReader dataReader = new DataReader(printer);
+    private FileManager fileManager;
 
     private Library library = new Library();
+
+    LibraryControl() {
+        this.fileManager = new FileManagerBuilder(printer, dataReader).build();
+        try {
+            library = fileManager.importData();
+            printer.printLine("Imported data");
+        } catch (DataImportException e) {
+            printer.printLine(e.getMessage());
+            printer.printLine("New database initialized.");
+            library = new Library();
+        }
+    }
 
     public void controlLoop() {
         Option option;
@@ -44,26 +61,6 @@ public class LibraryControl {
         } while (option != Option.EXIT);
     }
 
-    private void printMagazines() {
-        Publication[] publications = library.getPublications();
-        printer.printMagazine(publications);
-    }
-
-    private void addMagazine() {
-        Magazine magazine = dataReader.readAndCreateMagazine();
-        library.addMagazine(magazine);
-    }
-
-    private void addBook() {
-        Book book = dataReader.readAndCreateBook();
-        library.addPublication(book);
-    }
-
-    private void printBooks() {
-        Publication[] publications = library.getPublications();
-        printer.printBook(publications);
-    }
-
     private void printOptions() {
         System.out.println("Choose option:");
         for (Option option : Option.values()) {
@@ -71,9 +68,47 @@ public class LibraryControl {
         }
     }
 
+    private void addBook() {
+        try {
+            Book book = dataReader.readAndCreateBook();
+            library.addPublication(book);
+        } catch (InputMismatchException e) {
+            printer.printLine("Failed, wrong data");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            printer.printLine("Capacity limit reached, no more book can be added");
+        }
+    }
+
+    private void printMagazines() {
+        Publication[] publications = library.getPublications();
+        printer.printMagazine(publications);
+    }
+
+    private void addMagazine() {
+        try {
+            Magazine magazine = dataReader.readAndCreateMagazine();
+            library.addMagazine(magazine);
+        } catch (InputMismatchException e) {
+            printer.printLine("Failed, wrong data");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            printer.printLine("Capacity limit reached, no more magazine can be added");
+        }
+    }
+
+    private void printBooks() {
+        Publication[] publications = library.getPublications();
+        printer.printBook(publications);
+    }
+
     private void exit() {
-        System.out.println("Program end.");
+        try {
+            fileManager.exportData(library);
+            printer.printLine("Successfully exported data to a file");
+        } catch (DataExportException e) {
+            printer.printLine(e.getMessage());
+        }
         dataReader.close();
+        System.out.println("Program end.");
     }
 
     private Option getOption() {
