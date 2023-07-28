@@ -48,4 +48,14 @@ public class Library {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < publicationsNumber; i++) {
+            stringBuilder.append(publications[i]);
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
+    }
 }
