@@ -1,13 +1,19 @@
 package com.javastart.app;
 
+import com.javastart.exception.NoSuchOptionException;
+import com.javastart.io.ConsolePrinter;
 import com.javastart.io.DataReader;
 import com.javastart.model.Book;
 import com.javastart.model.Library;
 import com.javastart.model.Magazine;
+import com.javastart.model.Publication;
+
+import java.util.InputMismatchException;
 
 public class LibraryControl {
+    private ConsolePrinter printer = new ConsolePrinter();
+    private DataReader dataReader = new DataReader(printer);
 
-    private DataReader dataReader = new DataReader();
     private Library library = new Library();
 
     public void controlLoop() {
@@ -15,7 +21,7 @@ public class LibraryControl {
 
         do {
             printOptions();
-            option = Option.createFromInt(dataReader.getInt());
+            option = getOption();
             switch (option) {
                 case ADD_BOOK:
                     addBook();
@@ -39,7 +45,8 @@ public class LibraryControl {
     }
 
     private void printMagazines() {
-        library.printMagazines();
+        Publication[] publications = library.getPublications();
+        printer.printMagazine(publications);
     }
 
     private void addMagazine() {
@@ -53,7 +60,8 @@ public class LibraryControl {
     }
 
     private void printBooks() {
-        library.printBooks();
+        Publication[] publications = library.getPublications();
+        printer.printBook(publications);
     }
 
     private void printOptions() {
@@ -66,6 +74,22 @@ public class LibraryControl {
     private void exit() {
         System.out.println("Program end.");
         dataReader.close();
+    }
+
+    private Option getOption() {
+        boolean optionOk = false;
+        Option option = null;
+        while (!optionOk) {
+            try {
+                option = Option.createFromInt(dataReader.getInt());
+                optionOk = true;
+            } catch (NoSuchOptionException e) {
+                printer.printLine(e.getMessage() + ", enter option again.");
+            } catch (InputMismatchException ignored) {
+                printer.printLine("Incorrect value.");
+            }
+        }
+        return option;
     }
 
 //        books[0] = new Book("Harry Potter and the Philosopher's Stone", "J. K. Rowling",

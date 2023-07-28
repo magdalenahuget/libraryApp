@@ -13,6 +13,11 @@ public class Library {
         publicationsNumber++;
     }
 
+
+    public Publication[] getPublications() {
+        return publications;
+    }
+
     public void addBook(Book book){
         addPublication(book);
     }

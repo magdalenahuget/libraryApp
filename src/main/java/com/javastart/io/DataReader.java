@@ -8,24 +8,10 @@ import java.util.Scanner;
 public class DataReader {
 
     private Scanner scanner = new Scanner(System.in);
+    private ConsolePrinter consolePrinter;
 
-    public Book readAndCreateBook() {
-        System.out.println("Title: ");
-        String title = scanner.nextLine();
-        System.out.println("Author: ");
-        String author = scanner.nextLine();
-        System.out.println("Publisher: ");
-        String publisher = scanner.nextLine();
-        System.out.println("ISBN: ");
-        String isbn = scanner.nextLine();
-        System.out.println("Release date: ");
-        int releaseDate = scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Pages: ");
-        int pages = scanner.nextInt();
-        scanner.nextLine();
-
-        return new Book(title, author, releaseDate, pages, publisher, isbn);
+    public DataReader(ConsolePrinter consolePrinter) {
+        this.consolePrinter = consolePrinter;
     }
 
     public void close() {
@@ -33,23 +19,44 @@ public class DataReader {
     }
 
     public int getInt() {
-        int inputInt = scanner.nextInt();
+        try {
+            return scanner.nextInt();
+        } finally {
+            scanner.nextLine();
+        }
+    }
+
+    public Book readAndCreateBook() {
+        consolePrinter.printLine("Title: ");
+        String title = scanner.nextLine();
+        consolePrinter.printLine("Author: ");
+        String author = scanner.nextLine();
+        consolePrinter.printLine("Publisher: ");
+        String publisher = scanner.nextLine();
+        consolePrinter.printLine("ISBN: ");
+        String isbn = scanner.nextLine();
+        consolePrinter.printLine("Release date: ");
+        int releaseDate = scanner.nextInt();
         scanner.nextLine();
-        return inputInt;
+        consolePrinter.printLine("Pages: ");
+        int pages = scanner.nextInt();
+        scanner.nextLine();
+
+        return new Book(title, author, releaseDate, pages, publisher, isbn);
     }
 
     public Magazine readAndCreateMagazine() {
-        System.out.println("Title: ");
+        consolePrinter.printLine("Title: ");
         String title = scanner.nextLine();
-        System.out.println("Publisher: ");
+        consolePrinter.printLine("Publisher: ");
         String publisher = scanner.nextLine();
-        System.out.println("Language: ");
+        consolePrinter.printLine("Language: ");
         String language = scanner.nextLine();
-        System.out.println("Release date: ");
+        consolePrinter.printLine("Release date: ");
         int year = getInt();
-        System.out.println("Month: ");
+        consolePrinter.printLine("Month: ");
         int month = getInt();
-        System.out.println("Day: ");
+        consolePrinter.printLine("Day: ");
         int day = getInt();
 
         return new Magazine(title, publisher, language, year, month, day);
