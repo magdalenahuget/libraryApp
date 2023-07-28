@@ -19,10 +19,10 @@ public class LibraryControl {
     private DataReader dataReader = new DataReader(printer);
     private FileManager fileManager;
 
-    private Library library = new Library();
+    private Library library;
 
     LibraryControl() {
-        this.fileManager = new FileManagerBuilder(printer, dataReader).build();
+        fileManager = new FileManagerBuilder(printer, dataReader).build();
         try {
             library = fileManager.importData();
             printer.printLine("Imported data");
@@ -56,59 +56,9 @@ public class LibraryControl {
                     exit();
                     break;
                 default:
-                    System.out.println("There is no such option, please re-enter.");
+                    printer.printLine("There is no such option, please re-enter.");
             }
         } while (option != Option.EXIT);
-    }
-
-    private void printOptions() {
-        System.out.println("Choose option:");
-        for (Option option : Option.values()) {
-            System.out.println(option);
-        }
-    }
-
-    private void addBook() {
-        try {
-            Book book = dataReader.readAndCreateBook();
-            library.addPublication(book);
-        } catch (InputMismatchException e) {
-            printer.printLine("Failed, wrong data");
-        } catch (ArrayIndexOutOfBoundsException e) {
-            printer.printLine("Capacity limit reached, no more book can be added");
-        }
-    }
-
-    private void printMagazines() {
-        Publication[] publications = library.getPublications();
-        printer.printMagazine(publications);
-    }
-
-    private void addMagazine() {
-        try {
-            Magazine magazine = dataReader.readAndCreateMagazine();
-            library.addMagazine(magazine);
-        } catch (InputMismatchException e) {
-            printer.printLine("Failed, wrong data");
-        } catch (ArrayIndexOutOfBoundsException e) {
-            printer.printLine("Capacity limit reached, no more magazine can be added");
-        }
-    }
-
-    private void printBooks() {
-        Publication[] publications = library.getPublications();
-        printer.printBook(publications);
-    }
-
-    private void exit() {
-        try {
-            fileManager.exportData(library);
-            printer.printLine("Successfully exported data to a file");
-        } catch (DataExportException e) {
-            printer.printLine(e.getMessage());
-        }
-        dataReader.close();
-        System.out.println("Program end.");
     }
 
     private Option getOption() {
@@ -125,6 +75,85 @@ public class LibraryControl {
             }
         }
         return option;
+    }
+
+    private void printOptions() {
+        printer.printLine("Choose option:");
+        for (Option option : Option.values()) {
+            printer.printLine(option.toString());
+        }
+    }
+
+    private void addBook() {
+        try {
+            Book book = dataReader.readAndCreateBook();
+            library.addBook(book);
+        } catch (InputMismatchException e) {
+            printer.printLine("Failed, wrong data");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            printer.printLine("Capacity limit reached, no more book can be added");
+        }
+    }
+
+    private void printBooks() {
+        Publication[] publications = library.getPublications();
+        printer.printBook(publications);
+    }
+
+    private void addMagazine() {
+        try {
+            Magazine magazine = dataReader.readAndCreateMagazine();
+            library.addMagazine(magazine);
+        } catch (InputMismatchException e) {
+            printer.printLine("Failed, wrong data");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            printer.printLine("Capacity limit reached, no more magazine can be added");
+        }
+    }
+
+    private void printMagazines() {
+        Publication[] publications = library.getPublications();
+        printer.printMagazine(publications);
+    }
+
+    private void exit() {
+        try {
+            fileManager.exportData(library);
+            printer.printLine("Successfully exported data to a file");
+        } catch (DataExportException e) {
+            printer.printLine(e.getMessage());
+        }
+        dataReader.close();
+        printer.printLine("Program end.");
+    }
+
+    private enum Option {
+        EXIT(0, "Wyjście z programu"),
+        ADD_BOOK(1, "Dodanie książki"),
+        ADD_MAGAZINE(2,"Dodanie magazynu/gazety"),
+        PRINT_BOOKS(3, "Wyświetlenie dostępnych książek"),
+        PRINT_MAGAZINES(4, "Wyświetlenie dostępnych magazynów/gazet");
+
+        private int value;
+        private String description;
+
+        Option(int value, String desc) {
+            this.value = value;
+            this.description = desc;
+        }
+
+        @Override
+        public String toString() {
+            return value + " - " + description;
+        }
+
+        static Option createFromInt(int option) throws NoSuchOptionException {
+            try {
+                return Option.values()[option];
+            } catch(ArrayIndexOutOfBoundsException e) {
+                throw new NoSuchOptionException("Brak opcji o id " + option);
+            }
+        }
     }
 
 //        books[0] = new Book("Harry Potter and the Philosopher's Stone", "J. K. Rowling",

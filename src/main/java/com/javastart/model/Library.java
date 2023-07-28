@@ -1,6 +1,8 @@
 package com.javastart.model;
 
-public class Library {
+import java.io.Serializable;
+
+public class Library implements Serializable {
     private static final int MAX_PUBLICATIONS = 2000;
     private Publication[] publications = new Publication[MAX_PUBLICATIONS];
     private int publicationsNumber;

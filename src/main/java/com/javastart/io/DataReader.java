@@ -14,9 +14,6 @@ public class DataReader {
         this.consolePrinter = consolePrinter;
     }
 
-    public String getString(){
-        return scanner.nextLine();
-    }
     public void close() {
         scanner.close();
     }
@@ -27,6 +24,10 @@ public class DataReader {
         } finally {
             scanner.nextLine();
         }
+    }
+
+    public String getString(){
+        return scanner.nextLine();
     }
 
     public Book readAndCreateBook() {
