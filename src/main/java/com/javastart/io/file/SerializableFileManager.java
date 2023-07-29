@@ -7,7 +7,7 @@ import com.javastart.model.Library;
 import java.io.*;
 
 public class SerializableFileManager implements FileManager {
-    private static final String FILE_NAME = "src/main/resources/Library.o";
+    private static final String FILE_NAME = "src/main/resources/Library.io";
 
     @Override
     public void exportData(Library library) {
